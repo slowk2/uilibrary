@@ -630,48 +630,70 @@ function nurysium: create_section(name: string, imageID: number)
 	tween_service:Create(ImageLabel, TweenInfo.new(3, Enum.EasingStyle.Exponential), {ImageTransparency = 0.45}):Play()
 end
 
-function nurysium: create_dropdown(name: string, options: {string})
-    local dropdownFrame = Instance.new("Frame")
-    dropdownFrame.Size = UDim2.new(0, 150, 0, 40)
-    dropdownFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    dropdownFrame.BorderSizePixel = 0
-    dropdownFrame.Parent = ui.Background.Sections.real_sections
+function nurysium: create_dropdown(name: string, options: {string}, callback: (string) -> ())
+    task.wait(0.1)
 
+    local dropdown = Instance.new("Frame")
+    local titleLabel = Instance.new("TextLabel")
     local dropdownButton = Instance.new("TextButton")
-    dropdownButton.Size = UDim2.new(1, 0, 0, 40)
-    dropdownButton.Text = name
-    dropdownButton.Parent = dropdownFrame
+    local dropdownList = Instance.new("Frame")
 
-    local optionsFrame = Instance.new("Frame")
-    optionsFrame.Size = UDim2.new(1, 0, 0, 0)
-    optionsFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    optionsFrame.BorderSizePixel = 0
-    optionsFrame.Position = UDim2.new(0, 0, 1, 0)
-    optionsFrame.Parent = dropdownFrame
-    optionsFrame.Visible = false
-
-    local UIListLayout = Instance.new("UIListLayout", optionsFrame)
-    UIListLayout.Padding = UDim.new(0, 5)
-
+    dropdown.Name = name
+    dropdown.Parent = ui.Background.functions_frame -- Mude para onde deseja posicioná-lo
+    dropdown.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    dropdown.BorderSizePixel = 0
+    dropdown.Size = UDim2.new(0, 380, 0, 50)
+    
+    titleLabel.Name = "Title"
+    titleLabel.Parent = dropdown
+    titleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.Size = UDim2.new(0, 140, 0, 20)
+    titleLabel.Font = Enum.Font.GothamBold
+    titleLabel.Text = name
+    titleLabel.TextColor3 = Color3.fromRGB(231, 231, 243)
+    titleLabel.TextScaled = true
+    
+    dropdownButton.Name = "DropdownButton"
+    dropdownButton.Parent = dropdown
+    dropdownButton.BackgroundColor3 = Color3.fromRGB(15, 18, 24)
+    dropdownButton.Size = UDim2.new(1, 0, 0, 30)
+    dropdownButton.TextColor3 = Color3.fromRGB(231, 231, 243)
+    dropdownButton.Text = "Select an option"
+    dropdownButton.Font = Enum.Font.Gotham
+    dropdownButton.TextScaled = true
+    
+    dropdownList.Name = "DropdownList"
+    dropdownList.Parent = dropdown
+    dropdownList.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    dropdownList.Size = UDim2.new(1, 0, 0, 0)
+    dropdownList.Position = UDim2.new(0, 0, 1, 0)
+    dropdownList.Visible = false
+    
     for _, option in ipairs(options) do
         local optionButton = Instance.new("TextButton")
+        optionButton.Parent = dropdownList
+        optionButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
         optionButton.Size = UDim2.new(1, 0, 0, 30)
         optionButton.Text = option
-        optionButton.Parent = optionsFrame
+        optionButton.TextColor3 = Color3.fromRGB(231, 231, 243)
+        optionButton.Font = Enum.Font.Gotham
+        optionButton.TextScaled = true
 
         optionButton.MouseButton1Click:Connect(function()
-            print("Selected: " .. option) -- Aqui você pode definir o que acontece ao selecionar uma opção
+            callback(option)
+            dropdownButton.Text = option
+            dropdownList.Visible = false
         end)
     end
 
     dropdownButton.MouseButton1Click:Connect(function()
-        optionsFrame.Visible = not optionsFrame.Visible
-        if optionsFrame.Visible then
-            optionsFrame.Size = UDim2.new(1, 0, 0, #options * 35) -- Ajusta o tamanho baseado no número de opções
-        else
-            optionsFrame.Size = UDim2.new(1, 0, 0, 0)
-        end
+        dropdownList.Visible = not dropdownList.Visible
     end)
+
+    -- Animação para o dropdown (opcional)
+    dropdownList.Size = UDim2.new(1, 0, 0, 0)
+    dropdownList:TweenSize(UDim2.new(1, 0, 0, #options * 30), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true)
 end
 
 function nurysium: create_toggle(name: string, section_name: string, callback)
