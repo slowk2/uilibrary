@@ -630,49 +630,95 @@ function nurysium: create_section(name: string, imageID: number)
 	tween_service:Create(ImageLabel, TweenInfo.new(3, Enum.EasingStyle.Exponential), {ImageTransparency = 0.45}):Play()
 end
 
-function nurysium: create_dropdown(name: string, options: {string}, callback: (string) -> ())
+function nurysium:create_dropdown(name: string, section_name: string, options: {string}, callback)
     task.wait(0.1)
 
-    local dropdown = Instance.new("Frame")
-    local titleLabel = Instance.new("TextLabel")
-    local dropdownButton = Instance.new("TextButton")
-    local dropdownList = Instance.new("Frame")
+    callback = callback or function() end
+    local selectedOption = options[1] or ""
 
-    dropdown.Name = name
-    dropdown.Parent = ui.Background.functions_frame -- Mude para onde deseja posicioná-lo
-    dropdown.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    dropdown.BorderSizePixel = 0
-    dropdown.Size = UDim2.new(0, 380, 0, 50)
-    
-    titleLabel.Name = "Title"
-    titleLabel.Parent = dropdown
-    titleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    titleLabel.BackgroundTransparency = 1
-    titleLabel.Size = UDim2.new(0, 140, 0, 20)
-    titleLabel.Font = Enum.Font.GothamBold
-    titleLabel.Text = name
-    titleLabel.TextColor3 = Color3.fromRGB(231, 231, 243)
-    titleLabel.TextScaled = true
-    
-    dropdownButton.Name = "DropdownButton"
-    dropdownButton.Parent = dropdown
-    dropdownButton.BackgroundColor3 = Color3.fromRGB(15, 18, 24)
-    dropdownButton.Size = UDim2.new(1, 0, 0, 30)
-    dropdownButton.TextColor3 = Color3.fromRGB(231, 231, 243)
-    dropdownButton.Text = "Select an option"
-    dropdownButton.Font = Enum.Font.Gotham
-    dropdownButton.TextScaled = true
-    
-    dropdownList.Name = "DropdownList"
-    dropdownList.Parent = dropdown
-    dropdownList.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-    dropdownList.Size = UDim2.new(1, 0, 0, 0)
-    dropdownList.Position = UDim2.new(0, 0, 1, 0)
-    dropdownList.Visible = false
-    
+    local Example = Instance.new("Frame")
+    local UICorner = Instance.new("UICorner")
+    local Hitbox = Instance.new("TextButton")
+    local Title = Instance.new("TextLabel")
+    local DropdownButton = Instance.new("Frame")
+    local UICorner_2 = Instance.new("UICorner")
+    local DropdownList = Instance.new("Frame")
+    local UIGradient = Instance.new("UIGradient")
+
+    Example.Name = name
+    Example.Parent = ui.Background["functions_frame"]
+    Example.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Example.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Example.BorderSizePixel = 0
+    Example.Position = UDim2.new(0.0428211577, 0, 0.0157480314, 0)
+    Example.Size = UDim2.new(0, 380, 0, 43)
+    Example.ZIndex = 10
+
+    UICorner.CornerRadius = UDim.new(0, 10)
+    UICorner.Parent = Example
+
+    Hitbox.Name = "Hitbox"
+    Hitbox.Parent = Example
+    Hitbox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Hitbox.BackgroundTransparency = 1
+    Hitbox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Hitbox.BorderSizePixel = 0
+    Hitbox.Size = UDim2.new(1, 0, 1, 0)
+    Hitbox.Font = Enum.Font.SourceSans
+    Hitbox.TextColor3 = Color3.fromRGB(0, 0, 0)
+    Hitbox.TextSize = 1
+    Hitbox.TextTransparency = 1
+
+    Title.Name = "Title"
+    Title.Parent = Example
+    Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Title.BackgroundTransparency = 1
+    Title.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Title.BorderSizePixel = 0
+    Title.Position = UDim2.new(0.0449240431, 0, 0.275129795, 0)
+    Title.Size = UDim2.new(0, 140, 0, 20)
+    Title.ZIndex = 10
+    Title.Font = Enum.Font.GothamBold
+    Title.Text = tostring(name)
+    Title.TextColor3 = Color3.fromRGB(231, 231, 243)
+    Title.TextScaled = true
+    Title.TextWrapped = true
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+
+    DropdownButton.Name = "DropdownButton"
+    DropdownButton.Parent = Example
+    DropdownButton.BackgroundColor3 = Color3.fromRGB(15, 18, 24)
+    DropdownButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    DropdownButton.BorderSizePixel = 0
+    DropdownButton.Position = UDim2.new(0.902837157, 0, 0.251873642, 0)
+    DropdownButton.Size = UDim2.new(0, 140, 0, 30)
+    DropdownButton.ZIndex = 15
+
+    UICorner_2.CornerRadius = UDim.new(0, 5)
+    UICorner_2.Parent = DropdownButton
+
+    local SelectedText = Instance.new("TextLabel")
+    SelectedText.Parent = DropdownButton
+    SelectedText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    SelectedText.BackgroundTransparency = 1
+    SelectedText.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    SelectedText.BorderSizePixel = 0
+    SelectedText.Size = UDim2.new(1, 0, 1, 0)
+    SelectedText.Font = Enum.Font.Gotham
+    SelectedText.Text = selectedOption
+    SelectedText.TextColor3 = Color3.fromRGB(231, 231, 243)
+    SelectedText.TextScaled = true
+
+    DropdownList.Name = "DropdownList"
+    DropdownList.Parent = Example
+    DropdownList.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    DropdownList.Size = UDim2.new(1, 0, 0, 0)
+    DropdownList.Position = UDim2.new(0, 0, 1, 0)
+    DropdownList.Visible = false
+
     for _, option in ipairs(options) do
         local optionButton = Instance.new("TextButton")
-        optionButton.Parent = dropdownList
+        optionButton.Parent = DropdownList
         optionButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
         optionButton.Size = UDim2.new(1, 0, 0, 30)
         optionButton.Text = option
@@ -681,20 +727,37 @@ function nurysium: create_dropdown(name: string, options: {string}, callback: (s
         optionButton.TextScaled = true
 
         optionButton.MouseButton1Click:Connect(function()
-            callback(option)
-            dropdownButton.Text = option
-            dropdownList.Visible = false
+            selectedOption = option
+            SelectedText.Text = selectedOption
+            DropdownList.Visible = false
+            callback(selectedOption)
         end)
     end
 
-    dropdownButton.MouseButton1Click:Connect(function()
-        dropdownList.Visible = not dropdownList.Visible
+    Hitbox.MouseButton1Up:Connect(function()
+        DropdownList.Visible = not DropdownList.Visible
     end)
 
-    -- Animação para o dropdown (opcional)
-    dropdownList.Size = UDim2.new(1, 0, 0, 0)
-    dropdownList:TweenSize(UDim2.new(1, 0, 0, #options * 30), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true)
+    Hitbox.TouchTap:Connect(function()
+        DropdownList.Visible = not DropdownList.Visible
+    end)
+
+    game:GetService("RunService").Heartbeat:Connect(function()
+        if not section_name:match(ui_data.current_section) and not table.find(search_table, name) then
+            Example.Visible = false
+        else
+            Example.Visible = true
+        end
+    end)
+
+    UIGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0.00, Color3.fromRGB(16, 18, 24)),
+        ColorSequenceKeypoint.new(1.00, Color3.fromRGB(22, 25, 34))
+    }
+    UIGradient.Rotation = -9
+    UIGradient.Parent = Example
 end
+
 
 function nurysium: create_toggle(name: string, section_name: string, callback)
 	task.wait(0.1)
