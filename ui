@@ -862,16 +862,16 @@ function nurysium:create_dropdown(name: string, section_name: string, options: {
     DropdownList.Name = "DropdownList"
     DropdownList.Parent = Example
     DropdownList.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-    DropdownList.Size = UDim2.new(1, 0, 0, #options * 40) -- Tamanho dinâmico baseado no número de opções
+    DropdownList.Size = UDim2.new(1, 0, 0, 40 * #options) -- Tamanho baseado no número de opções
     DropdownList.Position = UDim2.new(0, 0, 1, 0)
     DropdownList.Visible = false
 
     for index, option in ipairs(options) do
         local optionButton = Instance.new("TextButton")
         optionButton.Parent = DropdownList
-        optionButton.BackgroundColor3 = Color3.fromRGB(15, 18, 24) -- Cor igual ao botão
+        optionButton.BackgroundColor3 = Color3.fromRGB(15, 18, 24)
         optionButton.Size = UDim2.new(1, 0, 0, 40) -- Altura consistente
-        optionButton.Position = UDim2.new(0, 0, (index - 1) * 0.1, 0) -- Ajusta a posição com espaçamento
+        optionButton.Position = UDim2.new(0, 0, (index - 1) * 40, 0) -- Ajusta a posição com espaçamento fixo
         optionButton.Text = option
         optionButton.TextColor3 = Color3.fromRGB(231, 231, 243)
         optionButton.Font = Enum.Font.GothamBold
@@ -888,7 +888,6 @@ function nurysium:create_dropdown(name: string, section_name: string, options: {
             callback(selectedOption)
         end)
 
-        -- Adiciona um efeito ao passar o mouse
         optionButton.MouseEnter:Connect(function()
             optionButton.BackgroundColor3 = Color3.fromRGB(25, 28, 38)
         end)
@@ -921,6 +920,7 @@ function nurysium:create_dropdown(name: string, section_name: string, options: {
     UIGradient.Rotation = -9
     UIGradient.Parent = Example
 end
+
 
 
 return nurysium
