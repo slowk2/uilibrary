@@ -630,59 +630,48 @@ function nurysium: create_section(name: string, imageID: number)
 	tween_service:Create(ImageLabel, TweenInfo.new(3, Enum.EasingStyle.Exponential), {ImageTransparency = 0.45}):Play()
 end
 
-function nurysium:create_dropdown(name: string, options: {string}, parent)
-    local Dropdown = Instance.new("Frame", parent)
-    Dropdown.Size = UDim2.new(0, 200, 0, 40)
-    Dropdown.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    Dropdown.BorderSizePixel = 0
-    Dropdown.BackgroundTransparency = 0.5
+function nurysium: create_dropdown(name: string, options: {string})
+    local dropdownFrame = Instance.new("Frame")
+    dropdownFrame.Size = UDim2.new(0, 150, 0, 40)
+    dropdownFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    dropdownFrame.BorderSizePixel = 0
+    dropdownFrame.Parent = ui.Background.Sections.real_sections
 
-    local DropdownButton = Instance.new("TextButton", Dropdown)
-    DropdownButton.Size = UDim2.new(1, 0, 1, 0)
-    DropdownButton.Text = name
-    DropdownButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    DropdownButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    DropdownButton.Font = Enum.Font.GothamBold
-    DropdownButton.TextSize = 14
+    local dropdownButton = Instance.new("TextButton")
+    dropdownButton.Size = UDim2.new(1, 0, 0, 40)
+    dropdownButton.Text = name
+    dropdownButton.Parent = dropdownFrame
 
-    local OptionsFrame = Instance.new("Frame", Dropdown)
-    OptionsFrame.Size = UDim2.new(1, 0, 0, #options * 30) -- altura com base no número de opções
-    OptionsFrame.Position = UDim2.new(0, 0, 1, 0)
-    OptionsFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    OptionsFrame.Visible = false
+    local optionsFrame = Instance.new("Frame")
+    optionsFrame.Size = UDim2.new(1, 0, 0, 0)
+    optionsFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    optionsFrame.BorderSizePixel = 0
+    optionsFrame.Position = UDim2.new(0, 0, 1, 0)
+    optionsFrame.Parent = dropdownFrame
+    optionsFrame.Visible = false
+
+    local UIListLayout = Instance.new("UIListLayout", optionsFrame)
+    UIListLayout.Padding = UDim.new(0, 5)
 
     for _, option in ipairs(options) do
-        local OptionButton = Instance.new("TextButton", OptionsFrame)
-        OptionButton.Size = UDim2.new(1, 0, 0, 30)
-        OptionButton.Text = option
-        OptionButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-        OptionButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-        OptionButton.Font = Enum.Font.Gotham
-        OptionButton.TextSize = 14
+        local optionButton = Instance.new("TextButton")
+        optionButton.Size = UDim2.new(1, 0, 0, 30)
+        optionButton.Text = option
+        optionButton.Parent = optionsFrame
 
-        OptionButton.MouseButton1Click:Connect(function()
-            DropdownButton.Text = option
-            OptionsFrame.Visible = false -- Fecha o dropdown após selecionar
+        optionButton.MouseButton1Click:Connect(function()
+            print("Selected: " .. option) -- Aqui você pode definir o que acontece ao selecionar uma opção
         end)
     end
 
-    DropdownButton.MouseButton1Click:Connect(function()
-        OptionsFrame.Visible = not OptionsFrame.Visible
-    end)
-
-    -- Opcional: Para fechar o dropdown ao clicar fora
-    local function closeDropdown()
-        OptionsFrame.Visible = false
-    end
-
-    -- Conexão de eventos de entrada
-    game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessed)
-        if not gameProcessed then
-            closeDropdown()
+    dropdownButton.MouseButton1Click:Connect(function()
+        optionsFrame.Visible = not optionsFrame.Visible
+        if optionsFrame.Visible then
+            optionsFrame.Size = UDim2.new(1, 0, 0, #options * 35) -- Ajusta o tamanho baseado no número de opções
+        else
+            optionsFrame.Size = UDim2.new(1, 0, 0, 0)
         end
     end)
-
-    return Dropdown
 end
 
 function nurysium: create_toggle(name: string, section_name: string, callback)
